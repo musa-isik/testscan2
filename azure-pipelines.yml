@@ -6,8 +6,8 @@ pool:
 
 variables:
   buildId: 'PythonProject_SAST'
-  fortifyBin: 'C:\Fortify\Fortify_SCA_and_Apps_24.2.0\bin'
-  pythonPath: 'C:\Python39'
+  fortifyBin: 'C:\Program Files\Fortify\OpenText_SAST_Fortify_26.1.0\bin'
+  pythonPath: 'C:\Users\m-xz9\AppData\Local\Microsoft\WindowsApps'
 
 steps:
 - checkout: self
