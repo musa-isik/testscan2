@@ -8,6 +8,9 @@ variables:
   buildId: 'PythonProject_SAST'
   fortifyBin: 'C:\Program Files\Fortify\OpenText_SAST_Fortify_26.1.0\bin'
   pythonPath: 'C:\Users\m-xz9\AppData\Local\Microsoft\WindowsApps'
+  sscUrl: 'http://192.168.1.131:8081/ssc'
+  fortifyProject: 'test-azure'      # SSC'deki Application adı
+  fortifyVersion: 'dev'                # SSC'deki Version adı
 
 steps:
 - checkout: self
@@ -32,3 +35,8 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)\results.fpr'
     ArtifactName: 'FortifyResults'
+
+- task: CmdLine@2
+  displayName: 'Fortify - SSC ye Upload'
+  inputs:
+    script: '"$(fortifyBin)\fortifyclient.bat" uploadFPR -file "$(Build.ArtifactStagingDirectory)\results.fpr" -url $(sscUrl) -authtoken $(FortifyAuthToken) -project "$(fortifyProject)" -applicationVersion "$(fortifyVersion)"'
