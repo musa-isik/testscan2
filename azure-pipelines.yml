@@ -9,6 +9,7 @@ variables:
   fortifyBin: 'C:\Program Files\Fortify\OpenText_SAST_Fortify_26.1.0\bin'
   pythonPath: 'C:\Users\m-xz9\AppData\Local\Microsoft\WindowsApps'
   sscUrl: 'http://192.168.1.131:8081/ssc'
+  FortifyAuthToken: 'NjdjZjBhNzgtODIyOS00NDYzLWJhYmEtNjIxZGU5ODE3M2Y0'
   fortifyProject: 'test-azure'      # SSC'deki Application adı
   fortifyVersion: 'dev'                # SSC'deki Version adı
 
