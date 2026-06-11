@@ -1,0 +1,34 @@
+trigger:
+- main
+
+pool:
+  name: Default
+
+variables:
+  buildId: 'PythonProject_SAST'
+  fortifyBin: 'C:\Fortify\Fortify_SCA_and_Apps_24.2.0\bin'
+  pythonPath: 'C:\Python39'
+
+steps:
+- checkout: self
+
+- task: CmdLine@2
+  displayName: 'Fortify - Clean'
+  inputs:
+    script: '"$(fortifyBin)\sourceanalyzer.exe" -b $(buildId) -clean'
+
+- task: CmdLine@2
+  displayName: 'Fortify - Translate (Python kaynaklarını analiz et)'
+  inputs:
+    script: '"$(fortifyBin)\sourceanalyzer.exe" -b $(buildId) -python-path "$(pythonPath)" "$(Build.SourcesDirectory)\**\*.py"'
+
+- task: CmdLine@2
+  displayName: 'Fortify - Scan'
+  inputs:
+    script: '"$(fortifyBin)\sourceanalyzer.exe" -b $(buildId) -scan -f "$(Build.ArtifactStagingDirectory)\results.fpr"'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'FPR dosyasını yayınla'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)\results.fpr'
+    ArtifactName: 'FortifyResults'
