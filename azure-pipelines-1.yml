@@ -1,0 +1,54 @@
+# =========================================================
+# azure-pipelines-upstream.yml
+# Örnek: Python projesi build + Fortify template çağrısı
+# =========================================================
+
+trigger:
+  - main
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: SharedPipelineTemplates   # fortify-template.yml'in bulunduğu repo
+      ref: refs/heads/main
+
+stages:
+
+  - stage: Build
+    displayName: 'Build Application'
+    jobs:
+      - job: BuildJob
+        pool:
+          name: Default
+        steps:
+          - checkout: self
+            clean: true
+
+          - script: |
+              echo Proje build adimlari buraya
+            displayName: 'Build'
+
+  - template: fortify-template.yml@templates
+    parameters:
+      buildId: 'PythonProject_SAST'
+      sourcePath: '$(Build.SourcesDirectory)'
+      sourceLanguage: 'python'
+      fortifyBin: 'C:\Program Files\Fortify\OpenText_SAST_Fortify_26.1.0\bin'
+      pythonPath: ''   # gerekirse venv\Lib\site-packages yolu ver
+      sscUrl: 'https://192.168.1.131:8081/ssc'
+      fortifyProject: 'test-azure'
+      fortifyVersion: 'dev'
+      agentPool: 'Default'
+      failOnCritical: true
+      dependsOn: 'Build'
+
+# =========================================================
+# ALTERNATİF: template aynı repo içindeyse:
+#
+#   - template: templates/fortify-template.yml
+#     parameters:
+#       ...
+#
+# (resources.repositories bloğuna ihtiyaç kalmaz)
+# =========================================================
